@@ -80,5 +80,35 @@ namespace FocusTrack.Data.Repositories
 
             await context.SaveChangesAsync();
         }
+
+        public async Task<List<AppSession>> GetFilteredAsync(
+    DateTime fromDate,
+    DateTime toDate,
+    string? applicationName,
+    int? categoryId)
+        {
+            using FocusTrackDbContext context = new FocusTrackDbContext();
+
+            var query = context.AppSessions
+                .Include(session => session.Category)
+                .Where(session =>
+                    session.StartTime.Date >= fromDate.Date &&
+                    session.StartTime.Date <= toDate.Date);
+
+            if (!string.IsNullOrWhiteSpace(applicationName))
+            {
+                query = query.Where(session =>
+                    session.ApplicationName.Contains(applicationName));
+            }
+
+            if (categoryId.HasValue)
+            {
+                query = query.Where(session => session.CategoryId == categoryId.Value);
+            }
+
+            return await query
+                .OrderByDescending(session => session.StartTime)
+                .ToListAsync();
+        }
     }
 }

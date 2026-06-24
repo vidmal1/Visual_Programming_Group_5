@@ -121,6 +121,7 @@ namespace FocusTrack.UI.Views
             }
             catch (Exception ex)
             {
+
                 MessageBox.Show(
                     ex.Message,
                     "Error loading dashboard",
@@ -132,7 +133,7 @@ namespace FocusTrack.UI.Views
 
         private void lblDashboardTitle_Click(object sender, EventArgs e)
         {
-            // Not used yet
+            // Not used 
         }
     }
 }
