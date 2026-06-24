@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FocusTrack.Data.Repositories
+﻿namespace FocusTrack.Data.Repositories
 {
-    internal class GoalRepository
+    public class GoalRepository
     {
     }
 }
