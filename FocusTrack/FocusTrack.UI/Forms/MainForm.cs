@@ -1,16 +1,57 @@
 using FocusTrack.UI.Views;
+using FocusTrack.Business.Services;
 
 namespace FocusTrack.UI
 {
     public partial class MainForm : Form
     {
+        private readonly TrackingService _trackingService = new TrackingService();
+        private System.Windows.Forms.Timer _trackingTimer;
+
         public MainForm()
         {
             InitializeComponent();
 
             LoadViews();
 
+            _trackingTimer = new System.Windows.Forms.Timer();
+            _trackingTimer.Interval = 1000;
+            _trackingTimer.Tick += TrackingTimer_Tick;
+
+            btnStartTracking.Click += BtnStartTracking_Click;
+            btnStopTracking.Click += BtnStopTracking_Click;
+            btnRefresh.Click += BtnRefresh_Click;
+
             lblStatus.Text = "FocusTrack ready.";
+        }
+
+        private void BtnStartTracking_Click(object? sender, EventArgs e)
+        {
+            _trackingTimer.Start();
+            lblStatus.Text = "Tracking started.";
+        }
+
+        private void BtnStopTracking_Click(object? sender, EventArgs e)
+        {
+            _trackingTimer.Stop();
+            lblStatus.Text = "Tracking stopped.";
+        }
+
+        private void BtnRefresh_Click(object? sender, EventArgs e)
+        {
+            ShowCurrentActiveWindow();
+        }
+
+        private void TrackingTimer_Tick(object? sender, EventArgs e)
+        {
+            ShowCurrentActiveWindow();
+        }
+
+        private void ShowCurrentActiveWindow()
+        {
+            var windowInfo = _trackingService.GetCurrentForegroundWindow();
+
+            lblStatus.Text = $"Active: {windowInfo.ApplicationName} | {windowInfo.WindowTitle}";
         }
 
         private void LoadViews()

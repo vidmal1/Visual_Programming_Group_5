@@ -48,7 +48,7 @@
             btnStopTracking = new ToolStripButton();
             btnRefresh = new ToolStripButton();
             btnExport = new ToolStripButton();
-            lblStatus = new StatusStrip();
+            statusStripMain = new StatusStrip();
             tabControlMain = new TabControl();
             tabDashboard = new TabPage();
             tabHistory = new TabPage();
@@ -59,8 +59,10 @@
             showToolStripMenuItem = new ToolStripMenuItem();
             hideToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem1 = new ToolStripMenuItem();
+            lblStatus = new ToolStripStatusLabel();
             menuStrip1.SuspendLayout();
             toolStrip1.SuspendLayout();
+            statusStripMain.SuspendLayout();
             tabControlMain.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
@@ -110,25 +112,25 @@
             // dashboardToolStripMenuItem
             // 
             dashboardToolStripMenuItem.Name = "dashboardToolStripMenuItem";
-            dashboardToolStripMenuItem.Size = new Size(165, 26);
+            dashboardToolStripMenuItem.Size = new Size(224, 26);
             dashboardToolStripMenuItem.Text = "Dashboard";
             // 
             // historyToolStripMenuItem
             // 
             historyToolStripMenuItem.Name = "historyToolStripMenuItem";
-            historyToolStripMenuItem.Size = new Size(165, 26);
+            historyToolStripMenuItem.Size = new Size(224, 26);
             historyToolStripMenuItem.Text = "History";
             // 
             // settingsToolStripMenuItem
             // 
             settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Size = new Size(165, 26);
+            settingsToolStripMenuItem.Size = new Size(224, 26);
             settingsToolStripMenuItem.Text = "Settings";
             // 
             // reportsToolStripMenuItem
             // 
             reportsToolStripMenuItem.Name = "reportsToolStripMenuItem";
-            reportsToolStripMenuItem.Size = new Size(165, 26);
+            reportsToolStripMenuItem.Size = new Size(224, 26);
             reportsToolStripMenuItem.Text = "Reports";
             // 
             // toolStripMenuItem1
@@ -195,15 +197,16 @@
             btnExport.Size = new Size(56, 24);
             btnExport.Text = "Export";
             // 
-            // lblStatus
+            // statusStripMain
             // 
-            lblStatus.ImageScalingSize = new Size(20, 20);
-            lblStatus.Location = new Point(0, 631);
-            lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(1082, 22);
-            lblStatus.TabIndex = 2;
-            lblStatus.Text = " Ready";
-            lblStatus.ItemClicked += statusStrip1_ItemClicked;
+            statusStripMain.ImageScalingSize = new Size(20, 20);
+            statusStripMain.Items.AddRange(new ToolStripItem[] { lblStatus });
+            statusStripMain.Location = new Point(0, 627);
+            statusStripMain.Name = "statusStripMain";
+            statusStripMain.Size = new Size(1082, 26);
+            statusStripMain.TabIndex = 2;
+            statusStripMain.Text = " Ready";
+            statusStripMain.ItemClicked += statusStrip1_ItemClicked;
             // 
             // tabControlMain
             // 
@@ -215,7 +218,7 @@
             tabControlMain.Location = new Point(0, 55);
             tabControlMain.Name = "tabControlMain";
             tabControlMain.SelectedIndex = 0;
-            tabControlMain.Size = new Size(1082, 576);
+            tabControlMain.Size = new Size(1082, 572);
             tabControlMain.TabIndex = 3;
             // 
             // tabDashboard
@@ -223,7 +226,7 @@
             tabDashboard.Location = new Point(4, 29);
             tabDashboard.Name = "tabDashboard";
             tabDashboard.Padding = new Padding(3);
-            tabDashboard.Size = new Size(1074, 543);
+            tabDashboard.Size = new Size(1074, 539);
             tabDashboard.TabIndex = 0;
             tabDashboard.Text = "Dashboard";
             tabDashboard.UseVisualStyleBackColor = true;
@@ -234,7 +237,7 @@
             tabHistory.Location = new Point(4, 29);
             tabHistory.Name = "tabHistory";
             tabHistory.Padding = new Padding(3);
-            tabHistory.Size = new Size(1074, 543);
+            tabHistory.Size = new Size(1074, 539);
             tabHistory.TabIndex = 1;
             tabHistory.Text = "History";
             tabHistory.UseVisualStyleBackColor = true;
@@ -245,7 +248,7 @@
             tabSettings.Location = new Point(4, 29);
             tabSettings.Name = "tabSettings";
             tabSettings.Padding = new Padding(3);
-            tabSettings.Size = new Size(1074, 543);
+            tabSettings.Size = new Size(1074, 539);
             tabSettings.TabIndex = 2;
             tabSettings.Text = "Settings";
             tabSettings.UseVisualStyleBackColor = true;
@@ -276,7 +279,7 @@
             // showToolStripMenuItem
             // 
             showToolStripMenuItem.Name = "showToolStripMenuItem";
-            showToolStripMenuItem.Size = new Size(210, 24);
+            showToolStripMenuItem.Size = new Size(114, 24);
             showToolStripMenuItem.Text = "Show";
             // 
             // hideToolStripMenuItem
@@ -291,13 +294,19 @@
             exitToolStripMenuItem1.Size = new Size(114, 24);
             exitToolStripMenuItem1.Text = "Exit";
             // 
+            // lblStatus
+            // 
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(50, 20);
+            lblStatus.Text = "Ready";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1082, 653);
             Controls.Add(tabControlMain);
-            Controls.Add(lblStatus);
+            Controls.Add(statusStripMain);
             Controls.Add(toolStrip1);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
@@ -308,6 +317,8 @@
             menuStrip1.PerformLayout();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
+            statusStripMain.ResumeLayout(false);
+            statusStripMain.PerformLayout();
             tabControlMain.ResumeLayout(false);
             contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
@@ -318,7 +329,7 @@
 
         private MenuStrip menuStrip1;
         private ToolStrip toolStrip1;
-        private StatusStrip lblStatus;
+        private StatusStrip statusStripMain;
         private TabControl tabControlMain;
         private TabPage tabDashboard;
         private TabPage tabHistory;
@@ -345,5 +356,6 @@
         private ToolStripMenuItem showToolStripMenuItem;
         private ToolStripMenuItem hideToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem1;
+        private ToolStripStatusLabel lblStatus;
     }
 }
