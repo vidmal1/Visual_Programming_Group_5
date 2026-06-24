@@ -13,6 +13,7 @@ namespace FocusTrack.UI.Views
         private Label lblSessionCount = null!;
         private Label lblMostUsedApp = null!;
         private DataGridView dgvAppUsage = null!;
+        private DataGridView dgvGoalProgress = null!;
         private Button btnRefresh = null!;
 
         public DashboardView()
@@ -75,18 +76,39 @@ namespace FocusTrack.UI.Views
 
             actionPanel.Controls.Add(btnRefresh);
 
-            dgvAppUsage = new DataGridView
+            TableLayoutPanel contentLayout = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                ReadOnly = true,
-                AutoGenerateColumns = true,
-                AllowUserToAddRows = false,
-                AllowUserToDeleteRows = false,
-                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                ColumnCount = 2,
+                RowCount = 1,
+                Padding = new Padding(10)
             };
 
-            Controls.Add(dgvAppUsage);
+            contentLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 55));
+            contentLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45));
+
+            GroupBox appUsageGroup = new GroupBox
+            {
+                Text = "Today App Usage",
+                Dock = DockStyle.Fill
+            };
+
+            dgvAppUsage = CreateGrid();
+            appUsageGroup.Controls.Add(dgvAppUsage);
+
+            GroupBox goalGroup = new GroupBox
+            {
+                Text = "Daily Goal Progress",
+                Dock = DockStyle.Fill
+            };
+
+            dgvGoalProgress = CreateGrid();
+            goalGroup.Controls.Add(dgvGoalProgress);
+
+            contentLayout.Controls.Add(appUsageGroup, 0, 0);
+            contentLayout.Controls.Add(goalGroup, 1, 0);
+
+            Controls.Add(contentLayout);
             Controls.Add(actionPanel);
             Controls.Add(cardPanel);
             Controls.Add(lblTitle);
@@ -107,6 +129,20 @@ namespace FocusTrack.UI.Views
             };
         }
 
+        private DataGridView CreateGrid()
+        {
+            return new DataGridView
+            {
+                Dock = DockStyle.Fill,
+                ReadOnly = true,
+                AutoGenerateColumns = true,
+                AllowUserToAddRows = false,
+                AllowUserToDeleteRows = false,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+            };
+        }
+
         private async Task LoadDashboardAsync()
         {
             try
@@ -118,10 +154,10 @@ namespace FocusTrack.UI.Views
                 lblMostUsedApp.Text = $"Most Used\n{summary.MostUsedApplication} - {summary.MostUsedDurationText}";
 
                 dgvAppUsage.DataSource = summary.AppUsages;
+                dgvGoalProgress.DataSource = summary.GoalProgresses;
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(
                     ex.Message,
                     "Error loading dashboard",
@@ -133,7 +169,7 @@ namespace FocusTrack.UI.Views
 
         private void lblDashboardTitle_Click(object sender, EventArgs e)
         {
-            // Not used 
+            // Not used yet
         }
     }
 }

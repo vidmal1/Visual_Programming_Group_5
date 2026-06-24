@@ -13,5 +13,7 @@
         public string MostUsedDurationText { get; set; } = "0s";
 
         public List<AppUsageDto> AppUsages { get; set; } = new List<AppUsageDto>();
+
+        public List<DashboardGoalProgressDto> GoalProgresses { get; set; } = new List<DashboardGoalProgressDto>();
     }
 }
