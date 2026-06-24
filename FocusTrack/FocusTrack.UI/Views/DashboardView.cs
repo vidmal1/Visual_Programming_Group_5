@@ -1,4 +1,5 @@
-﻿using FocusTrack.Business.Services;
+﻿using FocusTrack.Business.DTOs;
+using FocusTrack.Business.Services;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -14,6 +15,7 @@ namespace FocusTrack.UI.Views
         private Label lblMostUsedApp = null!;
         private DataGridView dgvAppUsage = null!;
         private DataGridView dgvGoalProgress = null!;
+        private FlowLayoutPanel pnlChart = null!;
         private Button btnRefresh = null!;
 
         public DashboardView()
@@ -76,16 +78,43 @@ namespace FocusTrack.UI.Views
 
             actionPanel.Controls.Add(btnRefresh);
 
-            TableLayoutPanel contentLayout = new TableLayoutPanel
+            TableLayoutPanel mainLayout = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                ColumnCount = 2,
-                RowCount = 1,
+                RowCount = 2,
+                ColumnCount = 1,
                 Padding = new Padding(10)
             };
 
-            contentLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 55));
-            contentLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 60));
+
+            GroupBox chartGroup = new GroupBox
+            {
+                Text = "Top App Usage Chart",
+                Dock = DockStyle.Fill
+            };
+
+            pnlChart = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.TopDown,
+                AutoScroll = true,
+                Padding = new Padding(10),
+                WrapContents = false
+            };
+
+            chartGroup.Controls.Add(pnlChart);
+
+            TableLayoutPanel tableLayout = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 2,
+                RowCount = 1
+            };
+
+            tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 55));
+            tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45));
 
             GroupBox appUsageGroup = new GroupBox
             {
@@ -105,10 +134,13 @@ namespace FocusTrack.UI.Views
             dgvGoalProgress = CreateGrid();
             goalGroup.Controls.Add(dgvGoalProgress);
 
-            contentLayout.Controls.Add(appUsageGroup, 0, 0);
-            contentLayout.Controls.Add(goalGroup, 1, 0);
+            tableLayout.Controls.Add(appUsageGroup, 0, 0);
+            tableLayout.Controls.Add(goalGroup, 1, 0);
 
-            Controls.Add(contentLayout);
+            mainLayout.Controls.Add(chartGroup, 0, 0);
+            mainLayout.Controls.Add(tableLayout, 0, 1);
+
+            Controls.Add(mainLayout);
             Controls.Add(actionPanel);
             Controls.Add(cardPanel);
             Controls.Add(lblTitle);
@@ -155,6 +187,8 @@ namespace FocusTrack.UI.Views
 
                 dgvAppUsage.DataSource = summary.AppUsages;
                 dgvGoalProgress.DataSource = summary.GoalProgresses;
+
+                BuildAppUsageChart(summary.AppUsages);
             }
             catch (Exception ex)
             {
@@ -164,6 +198,80 @@ namespace FocusTrack.UI.Views
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
+            }
+        }
+
+        private void BuildAppUsageChart(List<AppUsageDto> appUsages)
+        {
+            pnlChart.Controls.Clear();
+
+            if (appUsages.Count == 0)
+            {
+                Label emptyLabel = new Label
+                {
+                    Text = "No app usage data available for today.",
+                    Width = 500,
+                    Height = 40,
+                    Font = new Font("Segoe UI", 11, FontStyle.Italic),
+                    TextAlign = ContentAlignment.MiddleLeft
+                };
+
+                pnlChart.Controls.Add(emptyLabel);
+                return;
+            }
+
+            int maxSeconds = appUsages.Max(app => app.TotalSeconds);
+
+            foreach (var app in appUsages.Take(5))
+            {
+                int percentage = maxSeconds == 0
+                    ? 0
+                    : Math.Max(1, (int)((app.TotalSeconds / (double)maxSeconds) * 100));
+
+                Panel rowPanel = new Panel
+                {
+                    Width = 900,
+                    Height = 45,
+                    Margin = new Padding(5)
+                };
+
+                Label appNameLabel = new Label
+                {
+                    Text = app.ApplicationName,
+                    Left = 0,
+                    Top = 10,
+                    Width = 150,
+                    Height = 25,
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold)
+                };
+
+                ProgressBar usageBar = new ProgressBar
+                {
+                    Left = 160,
+                    Top = 10,
+                    Width = 500,
+                    Height = 25,
+                    Minimum = 0,
+                    Maximum = 100,
+                    Value = percentage
+                };
+
+                Label durationLabel = new Label
+                {
+                    Text = app.DurationText,
+                    Left = 680,
+                    Top = 10,
+                    Width = 120,
+                    Height = 25,
+                    Font = new Font("Segoe UI", 10),
+                    TextAlign = ContentAlignment.MiddleLeft
+                };
+
+                rowPanel.Controls.Add(appNameLabel);
+                rowPanel.Controls.Add(usageBar);
+                rowPanel.Controls.Add(durationLabel);
+
+                pnlChart.Controls.Add(rowPanel);
             }
         }
 
