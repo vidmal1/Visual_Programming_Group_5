@@ -11,5 +11,7 @@ namespace FocusTrack.Core.Models
         public string WindowTitle { get; set; } = string.Empty;
 
         public DateTime DetectedAt { get; set; } = DateTime.Now;
+
+        public bool IsIgnored { get; set; }
     }
 }

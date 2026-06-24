@@ -50,5 +50,13 @@ namespace FocusTrack.Data.Repositories
             context.IgnoreListItems.Remove(item);
             await context.SaveChangesAsync();
         }
+
+        public async Task<bool> IsIgnoredAsync(string applicationName)
+        {
+            using FocusTrackDbContext context = new FocusTrackDbContext();
+
+            return await context.IgnoreListItems
+                .AnyAsync(item => item.ApplicationName.ToLower() == applicationName.ToLower());
+        }
     }
 }
