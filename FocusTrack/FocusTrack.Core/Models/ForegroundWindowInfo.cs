@@ -4,7 +4,12 @@ using System.Text;
 
 namespace FocusTrack.Core.Models
 {
-    internal class ForegroundWindowInfo
+    public class ForegroundWindowInfo
     {
+        public string ApplicationName { get; set; } = string.Empty;
+
+        public string WindowTitle { get; set; } = string.Empty;
+
+        public DateTime DetectedAt { get; set; } = DateTime.Now;
     }
 }
