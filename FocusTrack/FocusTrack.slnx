@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="FocusTrack.Business/FocusTrack.Business.csproj" />
+  <Project Path="FocusTrack.Core/FocusTrack.Core.csproj" />
+  <Project Path="FocusTrack.Data/FocusTrack.Data.csproj" />
+  <Project Path="FocusTrack.UI/FocusTrack.UI.csproj" />
+</Solution>
