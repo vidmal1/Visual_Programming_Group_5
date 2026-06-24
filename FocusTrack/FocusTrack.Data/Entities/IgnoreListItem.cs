@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FocusTrack.Data.Entities
 {
-    internal class IgnoreListItem
+    public class IgnoreListItem
     {
+        public int Id { get; set; }
+
+        [Required]
+        [MaxLength(150)]
+        public string ApplicationName { get; set; } = string.Empty;
     }
 }

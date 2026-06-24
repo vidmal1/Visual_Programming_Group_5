@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FocusTrack.Data.Interfaces
+﻿namespace FocusTrack.Data.Interfaces
 {
-    internal interface IRepository
+    public interface IRepository<T> where T : class
     {
+        Task<List<T>> GetAllAsync();
+
+        Task<T?> GetByIdAsync(int id);
+
+        Task AddAsync(T entity);
+
+        Task UpdateAsync(T entity);
+
+        Task DeleteAsync(T entity);
     }
 }

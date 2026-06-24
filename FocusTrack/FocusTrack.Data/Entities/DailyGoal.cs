@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FocusTrack.Data.Entities
+﻿namespace FocusTrack.Data.Entities
 {
-    internal class DailyGoal
+    public class DailyGoal
     {
+        public int Id { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; } = null!;
+
+        public int GoalMinutes { get; set; }
     }
 }

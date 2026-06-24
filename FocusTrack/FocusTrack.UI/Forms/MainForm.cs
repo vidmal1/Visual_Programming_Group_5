@@ -31,25 +31,29 @@ namespace FocusTrack.UI
             lblStatus.Text = "Tracking started.";
         }
 
-        private void BtnStopTracking_Click(object? sender, EventArgs e)
+        private async void BtnStopTracking_Click(object? sender, EventArgs e)
         {
             _trackingTimer.Stop();
-            lblStatus.Text = "Tracking stopped.";
+
+            await _trackingService.StopTrackingAsync();
+
+            lblStatus.Text = "Tracking stopped and session saved.";
         }
 
-        private void BtnRefresh_Click(object? sender, EventArgs e)
+        private async void BtnRefresh_Click(object? sender, EventArgs e)
         {
-            ShowCurrentActiveWindow();
+            await ShowCurrentActiveWindowAsync();
         }
 
-        private void TrackingTimer_Tick(object? sender, EventArgs e)
+
+        private async void TrackingTimer_Tick(object? sender, EventArgs e)
         {
-            ShowCurrentActiveWindow();
+            await ShowCurrentActiveWindowAsync();
         }
 
-        private void ShowCurrentActiveWindow()
+        private async Task ShowCurrentActiveWindowAsync()
         {
-            var windowInfo = _trackingService.GetCurrentForegroundWindow();
+            var windowInfo = await _trackingService.TrackCurrentWindowAsync();
 
             lblStatus.Text = $"Active: {windowInfo.ApplicationName} | {windowInfo.WindowTitle}";
         }

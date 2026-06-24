@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+  </Folder>
   <Project Path="FocusTrack.Business/FocusTrack.Business.csproj" />
   <Project Path="FocusTrack.Core/FocusTrack.Core.csproj" />
   <Project Path="FocusTrack.Data/FocusTrack.Data.csproj" />
