@@ -10,7 +10,7 @@ namespace FocusTrack.Business.Services
     public class TrackingService
     {
         private readonly SessionRepository _sessionRepository = new SessionRepository();
-
+        private readonly IgnoreListRepository _ignoreListRepository = new IgnoreListRepository();
         private AppSession? _currentSession;
 
         public ForegroundWindowInfo GetCurrentForegroundWindow()
@@ -50,6 +50,17 @@ namespace FocusTrack.Business.Services
 
             if (string.IsNullOrWhiteSpace(windowInfo.WindowTitle))
             {
+                return windowInfo;
+            }
+
+            bool isIgnored = await _ignoreListRepository.IsIgnoredAsync(windowInfo.ApplicationName);
+
+            windowInfo.IsIgnored = isIgnored;
+
+            if (isIgnored)
+            {
+                await EndCurrentSessionAsync();
+
                 return windowInfo;
             }
 

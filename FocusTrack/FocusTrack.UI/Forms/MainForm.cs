@@ -55,6 +55,12 @@ namespace FocusTrack.UI
         {
             var windowInfo = await _trackingService.TrackCurrentWindowAsync();
 
+            if (windowInfo.IsIgnored)
+            {
+                lblStatus.Text = $"Ignored: {windowInfo.ApplicationName}";
+                return;
+            }
+
             lblStatus.Text = $"Active: {windowInfo.ApplicationName} | {windowInfo.WindowTitle}";
         }
 
