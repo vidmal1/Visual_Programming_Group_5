@@ -24,6 +24,31 @@ namespace FocusTrack.Business.Services
             }).ToList();
         }
 
+        public async Task<List<SessionHistoryDto>> GetFilteredSessionsAsync(
+    DateTime fromDate,
+    DateTime toDate,
+    string? applicationName,
+    int? categoryId)
+        {
+            var sessions = await _sessionRepository.GetFilteredAsync(
+                fromDate,
+                toDate,
+                applicationName,
+                categoryId
+            );
+
+            return sessions.Select(session => new SessionHistoryDto
+            {
+                Id = session.Id,
+                ApplicationName = session.ApplicationName,
+                WindowTitle = session.WindowTitle,
+                CategoryName = session.Category?.Name ?? "Neutral",
+                StartTime = session.StartTime,
+                EndTime = session.EndTime,
+                DurationSeconds = session.DurationSeconds,
+                DurationText = FormatDuration(session.DurationSeconds)
+            }).ToList();
+        }
         private string FormatDuration(int totalSeconds)
         {
             TimeSpan time = TimeSpan.FromSeconds(totalSeconds);
