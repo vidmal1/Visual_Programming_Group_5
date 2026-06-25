@@ -9,5 +9,9 @@
         public int TotalSeconds { get; set; }
 
         public string DurationText { get; set; } = string.Empty;
+
+        public int UsagePercentage { get; set; }
+
+        public string PercentageText { get; set; } = string.Empty;
     }
 }

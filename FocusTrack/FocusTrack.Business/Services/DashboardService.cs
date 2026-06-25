@@ -31,23 +31,29 @@ namespace FocusTrack.Business.Services
             var mostUsedApp = appUsages.FirstOrDefault();
 
             var categoryUsages = categories
-                .Select(category =>
-                {
-                    var categorySessions = todaySessions
-                        .Where(session => session.CategoryId == category.Id)
-                        .ToList();
+    .Select(category =>
+    {
+        var categorySessions = todaySessions
+            .Where(session => session.CategoryId == category.Id)
+            .ToList();
 
-                    int categorySeconds = categorySessions.Sum(session => session.DurationSeconds);
+        int categorySeconds = categorySessions.Sum(session => session.DurationSeconds);
 
-                    return new CategoryUsageDto
-                    {
-                        CategoryName = category.Name,
-                        SessionCount = categorySessions.Count,
-                        TotalSeconds = categorySeconds,
-                        DurationText = FormatDuration(categorySeconds)
-                    };
-                })
-                .ToList();
+        int usagePercentage = totalSeconds == 0
+            ? 0
+            : (int)((categorySeconds / (double)totalSeconds) * 100);
+
+        return new CategoryUsageDto
+        {
+            CategoryName = category.Name,
+            SessionCount = categorySessions.Count,
+            TotalSeconds = categorySeconds,
+            DurationText = FormatDuration(categorySeconds),
+            UsagePercentage = usagePercentage,
+            PercentageText = $"{usagePercentage}%"
+        };
+    })
+    .ToList();
 
             int productiveSeconds = categoryUsages
                 .Where(category => category.CategoryName == "Productive")
@@ -56,6 +62,30 @@ namespace FocusTrack.Business.Services
             int productivityScore = totalSeconds == 0
                 ? 0
                 : (int)((productiveSeconds / (double)totalSeconds) * 100);
+            int neutralSeconds = categoryUsages
+    .Where(category => category.CategoryName == "Neutral")
+    .Sum(category => category.TotalSeconds);
+
+            int distractingSeconds = categoryUsages
+                .Where(category => category.CategoryName == "Distracting")
+                .Sum(category => category.TotalSeconds);
+
+            int productivePercentage = 0;
+            int neutralPercentage = 0;
+            int distractingPercentage = 0;
+
+            if (totalSeconds > 0)
+            {
+                productivePercentage = (int)Math.Round((productiveSeconds / (double)totalSeconds) * 100);
+                distractingPercentage = (int)Math.Round((distractingSeconds / (double)totalSeconds) * 100);
+
+                neutralPercentage = 100 - productivePercentage - distractingPercentage;
+
+                if (neutralPercentage < 0)
+                {
+                    neutralPercentage = 0;
+                }
+            }
 
             var goalProgresses = dailyGoals
                 .Select(goal =>
@@ -91,6 +121,9 @@ namespace FocusTrack.Business.Services
                 MostUsedApplication = mostUsedApp?.ApplicationName ?? "N/A",
                 MostUsedDurationText = mostUsedApp?.DurationText ?? "0s",
                 ProductivityScore = productivityScore,
+                ProductivePercentage = productivePercentage,
+                NeutralPercentage = neutralPercentage,
+                DistractingPercentage = distractingPercentage,
                 AppUsages = appUsages,
                 CategoryUsages = categoryUsages,
                 GoalProgresses = goalProgresses
