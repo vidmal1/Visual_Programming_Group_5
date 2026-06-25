@@ -13,8 +13,12 @@ namespace FocusTrack.UI.Views
         private Label lblTotalTime = null!;
         private Label lblSessionCount = null!;
         private Label lblMostUsedApp = null!;
+        private Label lblProductivityScore = null!;
+
         private DataGridView dgvAppUsage = null!;
+        private DataGridView dgvCategoryUsage = null!;
         private DataGridView dgvGoalProgress = null!;
+
         private FlowLayoutPanel pnlChart = null!;
         private Button btnRefresh = null!;
 
@@ -50,14 +54,17 @@ namespace FocusTrack.UI.Views
             lblTotalTime = CreateCardLabel("Today Total: 0s");
             lblSessionCount = CreateCardLabel("Sessions: 0");
             lblMostUsedApp = CreateCardLabel("Most Used: N/A");
+            lblProductivityScore = CreateCardLabel("Productivity: 0%");
 
             lblTotalTime.Left = 20;
-            lblSessionCount.Left = 360;
-            lblMostUsedApp.Left = 700;
+            lblSessionCount.Left = 280;
+            lblMostUsedApp.Left = 540;
+            lblProductivityScore.Left = 800;
 
             cardPanel.Controls.Add(lblTotalTime);
             cardPanel.Controls.Add(lblSessionCount);
             cardPanel.Controls.Add(lblMostUsedApp);
+            cardPanel.Controls.Add(lblProductivityScore);
 
             Panel actionPanel = new Panel
             {
@@ -86,8 +93,8 @@ namespace FocusTrack.UI.Views
                 Padding = new Padding(10)
             };
 
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 60));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 35));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 65));
 
             GroupBox chartGroup = new GroupBox
             {
@@ -109,12 +116,13 @@ namespace FocusTrack.UI.Views
             TableLayoutPanel tableLayout = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                ColumnCount = 2,
+                ColumnCount = 3,
                 RowCount = 1
             };
 
-            tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 55));
-            tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45));
+            tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
+            tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+            tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
 
             GroupBox appUsageGroup = new GroupBox
             {
@@ -124,6 +132,15 @@ namespace FocusTrack.UI.Views
 
             dgvAppUsage = CreateGrid();
             appUsageGroup.Controls.Add(dgvAppUsage);
+
+            GroupBox categoryUsageGroup = new GroupBox
+            {
+                Text = "Category Summary",
+                Dock = DockStyle.Fill
+            };
+
+            dgvCategoryUsage = CreateGrid();
+            categoryUsageGroup.Controls.Add(dgvCategoryUsage);
 
             GroupBox goalGroup = new GroupBox
             {
@@ -135,7 +152,8 @@ namespace FocusTrack.UI.Views
             goalGroup.Controls.Add(dgvGoalProgress);
 
             tableLayout.Controls.Add(appUsageGroup, 0, 0);
-            tableLayout.Controls.Add(goalGroup, 1, 0);
+            tableLayout.Controls.Add(categoryUsageGroup, 1, 0);
+            tableLayout.Controls.Add(goalGroup, 2, 0);
 
             mainLayout.Controls.Add(chartGroup, 0, 0);
             mainLayout.Controls.Add(tableLayout, 0, 1);
@@ -151,10 +169,10 @@ namespace FocusTrack.UI.Views
             return new Label
             {
                 Text = text,
-                Width = 300,
+                Width = 240,
                 Height = 80,
                 Top = 15,
-                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),
                 TextAlign = ContentAlignment.MiddleCenter,
                 BorderStyle = BorderStyle.FixedSingle,
                 BackColor = Color.White
@@ -184,8 +202,10 @@ namespace FocusTrack.UI.Views
                 lblTotalTime.Text = $"Today Total\n{summary.TotalDurationText}";
                 lblSessionCount.Text = $"Sessions\n{summary.SessionCount}";
                 lblMostUsedApp.Text = $"Most Used\n{summary.MostUsedApplication} - {summary.MostUsedDurationText}";
+                lblProductivityScore.Text = $"Productivity\n{summary.ProductivityScore}%";
 
                 dgvAppUsage.DataSource = summary.AppUsages;
+                dgvCategoryUsage.DataSource = summary.CategoryUsages;
                 dgvGoalProgress.DataSource = summary.GoalProgresses;
 
                 BuildAppUsageChart(summary.AppUsages);
