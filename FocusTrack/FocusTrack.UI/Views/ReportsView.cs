@@ -1,4 +1,6 @@
-﻿using FocusTrack.Business.Services;
+﻿using FocusTrack.Business.DTOs;
+using FocusTrack.Business.Services;
+using System.Text;
 
 namespace FocusTrack.UI.Views
 {
@@ -12,7 +14,10 @@ namespace FocusTrack.UI.Views
         private DateTimePicker dtpTo = null!;
         private ComboBox cmbGroupBy = null!;
         private Button btnGenerate = null!;
+        private Button btnExportCsv = null!;
         private DataGridView dgvReport = null!;
+
+        private List<ReportRowDto> _currentReportRows = new List<ReportRowDto>();
 
         public ReportsView()
         {
@@ -108,12 +113,23 @@ namespace FocusTrack.UI.Views
 
             btnGenerate.Click += async (sender, e) => await GenerateReportAsync();
 
+            btnExportCsv = new Button
+            {
+                Text = "Export CSV",
+                Left = 810,
+                Top = 8,
+                Width = 110,
+                Height = 30
+            };
+
+            btnExportCsv.Click += async (sender, e) => await ExportCsvAsync();
+
             lblSummary = new Label
             {
                 Text = "Summary: 0 rows",
                 Left = 10,
                 Top = 55,
-                Width = 500,
+                Width = 700,
                 Height = 25,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold)
             };
@@ -125,6 +141,7 @@ namespace FocusTrack.UI.Views
             filterPanel.Controls.Add(lblGroupBy);
             filterPanel.Controls.Add(cmbGroupBy);
             filterPanel.Controls.Add(btnGenerate);
+            filterPanel.Controls.Add(btnExportCsv);
             filterPanel.Controls.Add(lblSummary);
 
             dgvReport = new DataGridView
@@ -149,19 +166,19 @@ namespace FocusTrack.UI.Views
             {
                 string groupBy = cmbGroupBy.SelectedItem?.ToString() ?? "Application";
 
-                var reportRows = await _reportService.GetReportAsync(
+                _currentReportRows = await _reportService.GetReportAsync(
                     dtpFrom.Value,
                     dtpTo.Value,
                     groupBy
                 );
 
-                dgvReport.DataSource = reportRows;
+                dgvReport.DataSource = _currentReportRows;
 
-                int totalSeconds = reportRows.Sum(row => row.TotalSeconds);
-                int totalSessions = reportRows.Sum(row => row.SessionCount);
+                int totalSeconds = _currentReportRows.Sum(row => row.TotalSeconds);
+                int totalSessions = _currentReportRows.Sum(row => row.SessionCount);
 
                 lblSummary.Text =
-                    $"Summary: {reportRows.Count} row(s) | {totalSessions} session(s) | Total: {FormatDuration(totalSeconds)}";
+                    $"Summary: {_currentReportRows.Count} row(s) | {totalSessions} session(s) | Total: {FormatDuration(totalSeconds)}";
 
                 lblTitle.Text = $"Reports - Grouped by {groupBy}";
             }
@@ -174,6 +191,79 @@ namespace FocusTrack.UI.Views
                     MessageBoxIcon.Error
                 );
             }
+        }
+
+        private async Task ExportCsvAsync()
+        {
+            try
+            {
+                if (_currentReportRows.Count == 0)
+                {
+                    MessageBox.Show(
+                        "No report data available to export.",
+                        "Export",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+
+                    return;
+                }
+
+                using SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "CSV files (*.csv)|*.csv",
+                    Title = "Export Report",
+                    FileName = $"FocusTrack_Report_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+                };
+
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                StringBuilder csvBuilder = new StringBuilder();
+
+                csvBuilder.AppendLine("Group Name,Session Count,Total Seconds,Total Duration");
+
+                foreach (var row in _currentReportRows)
+                {
+                    csvBuilder.AppendLine(
+                        $"{EscapeCsv(row.GroupName)},{row.SessionCount},{row.TotalSeconds},{EscapeCsv(row.TotalDurationText)}"
+                    );
+                }
+
+                await File.WriteAllTextAsync(
+                    saveFileDialog.FileName,
+                    csvBuilder.ToString(),
+                    Encoding.UTF8
+                );
+
+                MessageBox.Show(
+                    "Report exported successfully.",
+                    "Export Complete",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error exporting report",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        private string EscapeCsv(string value)
+        {
+            if (value.Contains(",") || value.Contains("\"") || value.Contains("\n"))
+            {
+                return $"\"{value.Replace("\"", "\"\"")}\"";
+            }
+
+            return value;
         }
 
         private string FormatDuration(int totalSeconds)
