@@ -12,7 +12,11 @@
 
         public string MostUsedDurationText { get; set; } = "0s";
 
+        public int ProductivityScore { get; set; }
+
         public List<AppUsageDto> AppUsages { get; set; } = new List<AppUsageDto>();
+
+        public List<CategoryUsageDto> CategoryUsages { get; set; } = new List<CategoryUsageDto>();
 
         public List<DashboardGoalProgressDto> GoalProgresses { get; set; } = new List<DashboardGoalProgressDto>();
     }

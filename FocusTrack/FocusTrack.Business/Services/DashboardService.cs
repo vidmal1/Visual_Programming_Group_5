@@ -7,11 +7,13 @@ namespace FocusTrack.Business.Services
     {
         private readonly SessionRepository _sessionRepository = new SessionRepository();
         private readonly GoalRepository _goalRepository = new GoalRepository();
+        private readonly CategoryRepository _categoryRepository = new CategoryRepository();
 
         public async Task<DashboardSummaryDto> GetTodaySummaryAsync()
         {
             var todaySessions = await _sessionRepository.GetByDateAsync(DateTime.Today);
             var dailyGoals = await _goalRepository.GetAllAsync();
+            var categories = await _categoryRepository.GetAllAsync();
 
             int totalSeconds = todaySessions.Sum(session => session.DurationSeconds);
 
@@ -27,6 +29,33 @@ namespace FocusTrack.Business.Services
                 .ToList();
 
             var mostUsedApp = appUsages.FirstOrDefault();
+
+            var categoryUsages = categories
+                .Select(category =>
+                {
+                    var categorySessions = todaySessions
+                        .Where(session => session.CategoryId == category.Id)
+                        .ToList();
+
+                    int categorySeconds = categorySessions.Sum(session => session.DurationSeconds);
+
+                    return new CategoryUsageDto
+                    {
+                        CategoryName = category.Name,
+                        SessionCount = categorySessions.Count,
+                        TotalSeconds = categorySeconds,
+                        DurationText = FormatDuration(categorySeconds)
+                    };
+                })
+                .ToList();
+
+            int productiveSeconds = categoryUsages
+                .Where(category => category.CategoryName == "Productive")
+                .Sum(category => category.TotalSeconds);
+
+            int productivityScore = totalSeconds == 0
+                ? 0
+                : (int)((productiveSeconds / (double)totalSeconds) * 100);
 
             var goalProgresses = dailyGoals
                 .Select(goal =>
@@ -61,7 +90,9 @@ namespace FocusTrack.Business.Services
                 SessionCount = todaySessions.Count,
                 MostUsedApplication = mostUsedApp?.ApplicationName ?? "N/A",
                 MostUsedDurationText = mostUsedApp?.DurationText ?? "0s",
+                ProductivityScore = productivityScore,
                 AppUsages = appUsages,
+                CategoryUsages = categoryUsages,
                 GoalProgresses = goalProgresses
             };
         }
