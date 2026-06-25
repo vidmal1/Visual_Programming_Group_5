@@ -26,6 +26,8 @@ namespace FocusTrack.Data.Context
 
         public DbSet<IgnoreListItem> IgnoreListItems { get; set; }
 
+        public DbSet<AppClassificationRule> AppClassificationRules { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite($"Data Source={_dbPath}");
@@ -53,6 +55,10 @@ namespace FocusTrack.Data.Context
                     ColorHex = "#EF4444"
                 }
             );
+
+            modelBuilder.Entity<AppClassificationRule>()
+    .HasIndex(rule => rule.ApplicationName)
+    .IsUnique();
         }
     }
 }

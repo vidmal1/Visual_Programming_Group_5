@@ -11,6 +11,7 @@ namespace FocusTrack.Business.Services
     {
         private readonly SessionRepository _sessionRepository = new SessionRepository();
         private readonly IgnoreListRepository _ignoreListRepository = new IgnoreListRepository();
+        private readonly ClassificationService _classificationService = new ClassificationService();
         private const int IdleThresholdSeconds = 60;
         private const int MinimumSessionDurationSeconds = 8;
         private AppSession? _currentSession;
@@ -114,6 +115,10 @@ namespace FocusTrack.Business.Services
 
         private async Task StartNewSessionAsync(ForegroundWindowInfo windowInfo)
         {
+            int categoryId = await _classificationService.GetCategoryIdForApplicationAsync(
+                windowInfo.ApplicationName
+            );
+
             AppSession session = new AppSession
             {
                 ApplicationName = windowInfo.ApplicationName,
@@ -121,7 +126,7 @@ namespace FocusTrack.Business.Services
                 StartTime = DateTime.Now,
                 EndTime = null,
                 DurationSeconds = 0,
-                CategoryId = 2
+                CategoryId = categoryId
             };
 
             await _sessionRepository.AddAsync(session);
