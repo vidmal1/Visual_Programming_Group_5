@@ -123,6 +123,12 @@ namespace FocusTrack.UI
         {
             var windowInfo = await _trackingService.TrackCurrentWindowAsync();
 
+            if (windowInfo.IsIdle)
+            {
+                lblStatus.Text = $"Idle detected: {windowInfo.IdleSeconds}s - tracking paused";
+                return;
+            }
+
             if (windowInfo.IsIgnored)
             {
                 lblStatus.Text = $"Ignored: {windowInfo.ApplicationName}";
@@ -131,7 +137,6 @@ namespace FocusTrack.UI
 
             lblStatus.Text = $"Active: {windowInfo.ApplicationName} | {windowInfo.WindowTitle}";
         }
-
         private void MainForm_Resize(object? sender, EventArgs e)
         {
             if (WindowState == FormWindowState.Minimized)

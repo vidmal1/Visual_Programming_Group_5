@@ -11,6 +11,8 @@ namespace FocusTrack.Business.Services
     {
         private readonly SessionRepository _sessionRepository = new SessionRepository();
         private readonly IgnoreListRepository _ignoreListRepository = new IgnoreListRepository();
+        private const int IdleThresholdSeconds = 60;
+        private const int MinimumSessionDurationSeconds = 8;
         private AppSession? _currentSession;
 
         public ForegroundWindowInfo GetCurrentForegroundWindow()
@@ -48,8 +50,30 @@ namespace FocusTrack.Business.Services
         {
             ForegroundWindowInfo windowInfo = GetCurrentForegroundWindow();
 
+            int idleSeconds = NativeMethods.GetIdleTimeSeconds();
+
+            if (idleSeconds >= IdleThresholdSeconds)
+            {
+                windowInfo.IsIdle = true;
+                windowInfo.IdleSeconds = idleSeconds;
+
+                DateTime lastActiveTime = DateTime.Now.AddSeconds(-idleSeconds);
+
+                await EndCurrentSessionAsync(lastActiveTime);
+
+                return windowInfo;
+            }
+
             if (string.IsNullOrWhiteSpace(windowInfo.WindowTitle))
             {
+                return windowInfo;
+            }
+            if (windowInfo.ApplicationName.Equals("FocusTrack.UI", StringComparison.OrdinalIgnoreCase))
+            {
+                windowInfo.IsIgnored = true;
+
+                await EndCurrentSessionAsync();
+
                 return windowInfo;
             }
 
@@ -105,16 +129,26 @@ namespace FocusTrack.Business.Services
             _currentSession = session;
         }
 
-        private async Task EndCurrentSessionAsync()
+        private async Task EndCurrentSessionAsync(DateTime? customEndTime = null)
         {
             if (_currentSession == null)
             {
                 return;
             }
 
-            DateTime endTime = DateTime.Now;
+            DateTime endTime = customEndTime ?? DateTime.Now;
 
-            await _sessionRepository.EndSessionAsync(_currentSession.Id, endTime);
+            if (endTime <= _currentSession.StartTime)
+            {
+                _currentSession = null;
+                return;
+            }
+
+            await _sessionRepository.EndSessionAsync(
+                _currentSession.Id,
+                endTime,
+                MinimumSessionDurationSeconds
+            );
 
             _currentSession = null;
         }
