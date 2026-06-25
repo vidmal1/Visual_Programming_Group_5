@@ -14,6 +14,9 @@ namespace FocusTrack.UI.Views
         private Label lblSessionCount = null!;
         private Label lblMostUsedApp = null!;
         private Label lblProductivityScore = null!;
+        private Label lblProductivePercent = null!;
+        private Label lblNeutralPercent = null!;
+        private Label lblDistractingPercent = null!;
 
         private DataGridView dgvAppUsage = null!;
         private DataGridView dgvCategoryUsage = null!;
@@ -53,18 +56,24 @@ namespace FocusTrack.UI.Views
 
             lblTotalTime = CreateCardLabel("Today Total: 0s");
             lblSessionCount = CreateCardLabel("Sessions: 0");
-            lblMostUsedApp = CreateCardLabel("Most Used: N/A");
-            lblProductivityScore = CreateCardLabel("Productivity: 0%");
+            
+            
+            lblProductivePercent = CreateCardLabel("Productive: 0%");
+            lblNeutralPercent = CreateCardLabel("Neutral: 0%");
+            lblDistractingPercent = CreateCardLabel("Distracting: 0%");
+
 
             lblTotalTime.Left = 20;
-            lblSessionCount.Left = 280;
-            lblMostUsedApp.Left = 540;
-            lblProductivityScore.Left = 800;
+            lblSessionCount.Left = 220;
+            lblProductivePercent.Left = 420;
+            lblNeutralPercent.Left = 620;
+            lblDistractingPercent.Left = 820;
 
             cardPanel.Controls.Add(lblTotalTime);
             cardPanel.Controls.Add(lblSessionCount);
-            cardPanel.Controls.Add(lblMostUsedApp);
-            cardPanel.Controls.Add(lblProductivityScore);
+            cardPanel.Controls.Add(lblProductivePercent);
+            cardPanel.Controls.Add(lblNeutralPercent);
+            cardPanel.Controls.Add(lblDistractingPercent);
 
             Panel actionPanel = new Panel
             {
@@ -169,7 +178,7 @@ namespace FocusTrack.UI.Views
             return new Label
             {
                 Text = text,
-                Width = 240,
+                Width = 180,
                 Height = 80,
                 Top = 15,
                 Font = new Font("Segoe UI", 11, FontStyle.Bold),
@@ -201,8 +210,12 @@ namespace FocusTrack.UI.Views
 
                 lblTotalTime.Text = $"Today Total\n{summary.TotalDurationText}";
                 lblSessionCount.Text = $"Sessions\n{summary.SessionCount}";
-                lblMostUsedApp.Text = $"Most Used\n{summary.MostUsedApplication} - {summary.MostUsedDurationText}";
-                lblProductivityScore.Text = $"Productivity\n{summary.ProductivityScore}%";
+                //lblMostUsedApp.Text = $"Most Used\n{summary.MostUsedApplication} - {summary.MostUsedDurationText}";
+                //lblProductivityScore.Text = $"Productivity\n{summary.ProductivityScore}%";
+
+                lblProductivePercent.Text = $"Productive\n{summary.ProductivePercentage}%";
+                lblNeutralPercent.Text = $"Neutral\n{summary.NeutralPercentage}%";
+                lblDistractingPercent.Text = $"Distracting\n{summary.DistractingPercentage}%";
 
                 dgvAppUsage.DataSource = summary.AppUsages;
                 dgvCategoryUsage.DataSource = summary.CategoryUsages;

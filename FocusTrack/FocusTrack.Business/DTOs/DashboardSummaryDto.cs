@@ -14,6 +14,12 @@
 
         public int ProductivityScore { get; set; }
 
+        public int ProductivePercentage { get; set; }
+
+        public int NeutralPercentage { get; set; }
+
+        public int DistractingPercentage { get; set; }
+
         public List<AppUsageDto> AppUsages { get; set; } = new List<AppUsageDto>();
 
         public List<CategoryUsageDto> CategoryUsages { get; set; } = new List<CategoryUsageDto>();
