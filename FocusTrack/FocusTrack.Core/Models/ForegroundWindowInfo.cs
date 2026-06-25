@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FocusTrack.Core.Models
+﻿namespace FocusTrack.Core.Models
 {
     public class ForegroundWindowInfo
     {
@@ -13,5 +9,9 @@ namespace FocusTrack.Core.Models
         public DateTime DetectedAt { get; set; } = DateTime.Now;
 
         public bool IsIgnored { get; set; }
+
+        public bool IsIdle { get; set; }
+
+        public int IdleSeconds { get; set; }
     }
 }

@@ -64,7 +64,7 @@ namespace FocusTrack.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task EndSessionAsync(int sessionId, DateTime endTime)
+        public async Task EndSessionAsync(int sessionId, DateTime endTime, int minimumDurationSeconds = 0)
         {
             using FocusTrackDbContext context = new FocusTrackDbContext();
 
@@ -75,8 +75,17 @@ namespace FocusTrack.Data.Repositories
                 return;
             }
 
+            int durationSeconds = (int)(endTime - session.StartTime).TotalSeconds;
+
+            if (durationSeconds < minimumDurationSeconds)
+            {
+                context.AppSessions.Remove(session);
+                await context.SaveChangesAsync();
+                return;
+            }
+
             session.EndTime = endTime;
-            session.DurationSeconds = (int)(endTime - session.StartTime).TotalSeconds;
+            session.DurationSeconds = durationSeconds;
 
             await context.SaveChangesAsync();
         }
