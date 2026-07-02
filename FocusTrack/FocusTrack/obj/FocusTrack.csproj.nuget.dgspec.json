@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Gimhana Menake\\Documents\\My documents\\github\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj": {}
+    "C:\\Users\\sandun\\Desktop\\visual new group\\FocusTrack\\FocusTrack\\FocusTrack.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Gimhana Menake\\Documents\\My documents\\github\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj": {
+    "C:\\Users\\sandun\\Desktop\\visual new group\\FocusTrack\\FocusTrack\\FocusTrack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gimhana Menake\\Documents\\My documents\\github\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj",
+        "projectUniqueName": "C:\\Users\\sandun\\Desktop\\visual new group\\FocusTrack\\FocusTrack\\FocusTrack.csproj",
         "projectName": "FocusTrack",
-        "projectPath": "C:\\Users\\Gimhana Menake\\Documents\\My documents\\github\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj",
-        "packagesPath": "C:\\Users\\Gimhana Menake\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gimhana Menake\\Documents\\My documents\\github\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\obj\\",
+        "projectPath": "C:\\Users\\sandun\\Desktop\\visual new group\\FocusTrack\\FocusTrack\\FocusTrack.csproj",
+        "packagesPath": "C:\\Users\\sandun\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\sandun\\Desktop\\visual new group\\FocusTrack\\FocusTrack\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Gimhana Menake\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\sandun\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -37,16 +42,46 @@
           ]
         },
         "restoreAuditProperties": {
-          "enableAudit": "true",
+          "enableAudit": "false",
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.300"
       },
       "frameworks": {
         "net10.0-windows": {
           "framework": "net10.0-windows7.0",
           "targetAlias": "net10.0-windows",
+          "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
+            "LiveChartsCore.SkiaSharpView.WinForms": {
+              "target": "Package",
+              "version": "[2.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[10.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.9, )"
+            },
+            "PdfSharp": {
+              "target": "Package",
+              "version": "[6.1.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -66,7 +101,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
