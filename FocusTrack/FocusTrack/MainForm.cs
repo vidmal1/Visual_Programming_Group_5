@@ -1198,7 +1198,7 @@ namespace FocusTrack
 
         private void ConfigureRefreshTimer()
         {
-            dashboardRefreshTimer.Interval = 30000;
+            dashboardRefreshTimer.Interval = 10000;
             dashboardRefreshTimer.Tick += async (_, _) => await RefreshDashboardAsync();
         }
 
