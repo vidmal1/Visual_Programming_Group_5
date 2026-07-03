@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FocusTrack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ced8c8d442e72e07304028a508e02caefb89ee80")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4e444797ab6da5ef671597015d67d42ee52e33cb")]
 [assembly: System.Reflection.AssemblyProductAttribute("FocusTrack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FocusTrack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
