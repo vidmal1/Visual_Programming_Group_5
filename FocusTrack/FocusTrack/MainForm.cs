@@ -1736,7 +1736,6 @@ namespace FocusTrack
                         LabelsPaint  = axisLabelsPaint,
                         TextSize     = 10,
                         MinStep      = 1,
-                        Labeler      = value => ((int)value).ToString(),
                         SeparatorsPaint = new SolidColorPaint(new SKColor(0, 0, 0, 0))
                     }
                 }
