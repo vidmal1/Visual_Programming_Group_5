@@ -1737,14 +1737,14 @@ namespace FocusTrack
                 {
                     new Axis
                     {
-                        Name         = "Usage Time (Minutes)",
-                        NameTextSize = 11,
-                        NamePaint    = axisTitlePaint,
-                        LabelsPaint  = axisLabelsPaint,
-                        TextSize     = 10,
-                        MinStep      = 1,
-                        Labeler      = value => ((int)value).ToString(),
-                        SeparatorsPaint = new SolidColorPaint(new SKColor(0, 0, 0, 0))
+                        Name            = "Usage Time (Minutes)",
+                        NameTextSize    = 11,
+                        NamePaint       = axisTitlePaint,
+                        LabelsPaint     = axisLabelsPaint,
+                        TextSize        = 10,
+                        MinStep         = 1,
+                        Labeler         = value => ((int)Math.Round(value)).ToString(),
+                        SeparatorsPaint = new SolidColorPaint(new SKColor(220, 215, 200)) { StrokeThickness = 0.5f }
                     }
                 }
             };
