@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -15,6 +15,8 @@ namespace FocusTrack.Services
         private string currentWindowTitle = string.Empty;
         private DateTime sessionStartTime;
         private bool isTracking;
+
+        public string CurrentAppName { get; private set; } = string.Empty;
 
         public TrackingService()
         {
@@ -91,6 +93,7 @@ namespace FocusTrack.Services
                 currentApplicationName = applicationName;
                 currentWindowTitle = windowTitle;
                 sessionStartTime = DateTime.Now;
+                CurrentAppName = applicationName;
                 return;
             }
 
@@ -100,6 +103,7 @@ namespace FocusTrack.Services
                 currentApplicationName = applicationName;
                 currentWindowTitle = windowTitle;
                 sessionStartTime = DateTime.Now;
+                CurrentAppName = applicationName;
                 return;
             }
 

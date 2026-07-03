@@ -1200,6 +1200,16 @@ namespace FocusTrack
         {
             dashboardRefreshTimer.Interval = 15000;
             dashboardRefreshTimer.Tick += async (_, _) => await RefreshDashboardAsync();
+
+            var statusTimer = new System.Windows.Forms.Timer { Interval = 5000 };
+            statusTimer.Tick += (_, _) =>
+            {
+                var appName = trackingService.CurrentAppName;
+                lblCurrentApp.Text = string.IsNullOrEmpty(appName)
+                    ? "Current App: Idle"
+                    : $"Current App: {appName}";
+            };
+            statusTimer.Start();
         }
 
         private async Task RefreshDashboardAsync()
