@@ -1198,7 +1198,7 @@ namespace FocusTrack
 
         private void ConfigureRefreshTimer()
         {
-            dashboardRefreshTimer.Interval = 30000;
+            dashboardRefreshTimer.Interval = 20000;
             dashboardRefreshTimer.Tick += async (_, _) => await RefreshDashboardAsync();
         }
 
@@ -1686,62 +1686,63 @@ namespace FocusTrack
             var neutralCategory = categoryMap.FirstOrDefault(kvp => kvp.Value.Equals("neutral", StringComparison.OrdinalIgnoreCase));
             int neutralId = neutralCategory.Key != 0 ? neutralCategory.Key : (categoryMap.Keys.FirstOrDefault());
 
-            var series = new ColumnSeries<double>
-            {
-                Name = "",
-                Values = appUsage.Select(app => app.TotalMinutes).ToArray(),
-                YToolTipLabelFormatter = (point) => $"{Math.Round(point.Model, 0)} min",
-                MaxBarWidth = 80,
-                Rx = 10,
-                Ry = 10
-            };
 
-            series.PointMeasured += (point) =>
+            var axisTitlePaint  = new SolidColorPaint(new SKColor(80, 90, 110));
+            var axisLabelsPaint = new SolidColorPaint(new SKColor(55, 65, 85));
+            var gridPaint       = new SolidColorPaint(new SKColor(210, 220, 235)) { StrokeThickness = 1 };
+            var rowSeries = new RowSeries<double>
+            {
+                Name   = "",
+                Values = appUsage.Select(app => app.TotalMinutes).ToArray(),
+                YToolTipLabelFormatter = (point) => $"{Math.Round(point.Model, 1)} min",
+                MaxBarWidth = 24,
+                Rx          = 5,
+                Ry          = 5
+            };
+            rowSeries.PointMeasured += (point) =>
             {
                 if (point.Visual is null) return;
-
-                var app = appUsage[point.Index];
+                var app   = appUsage[point.Index];
                 int catId = appClassMap.TryGetValue(app.AppName.ToLower(), out var id) ? id : neutralId;
                 string catName = categoryMap.TryGetValue(catId, out var name) ? name : "Neutral";
-
                 point.Visual.Fill = new SolidColorPaint(GetChartCategoryColor(catName));
             };
-
-            var axisTitlePaint = new SolidColorPaint(new SKColor(90, 90, 90));
-
+            var bgColor = Color.FromArgb(250, 248, 236);
             var chart = new CartesianChart
             {
+                BackColor      = bgColor,
                 LegendPosition = LiveChartsCore.Measure.LegendPosition.Hidden,
-                Series = appUsage.Count == 0
+                Series         = appUsage.Count == 0
                     ? Array.Empty<ISeries>()
-                    : new ISeries[] { series },
-                XAxes = new[]
-                {
-                    new Axis
-                    {
-                        Name = "Applications",
-                        NameTextSize = 12,
-                        NamePaint = axisTitlePaint,
-                        Labels = appUsage.Select(app => app.AppName.Length > 14 ? app.AppName.Substring(0, 11) + "..." : app.AppName).ToArray(),
-                        LabelsRotation = 90,
-                        MinStep = 1,
-                        TextSize = 10
-                    }
-                },
+                    : new ISeries[] { rowSeries },
                 YAxes = new[]
                 {
                     new Axis
                     {
-                        Name = "Usage Time (Minutes)",
-                        NameTextSize = 12,
-                        NamePaint = axisTitlePaint,
-                        TextSize = 10
+                        Labels          = appUsage.Select(app => app.AppName.Length > 18 ? app.AppName[..15] + "..." : app.AppName).ToArray(),
+                        TextSize        = 11,
+                        LabelsPaint     = axisLabelsPaint,
+                        SeparatorsPaint = new SolidColorPaint(new SKColor(0, 0, 0, 0)),
+                        MinStep         = 1
+                    }
+                },
+                XAxes = new[]
+                {
+                    new Axis
+                    {
+                        Name         = "Usage Time (Minutes)",
+                        NameTextSize = 11,
+                        NamePaint    = axisTitlePaint,
+                        LabelsPaint  = axisLabelsPaint,
+                        TextSize     = 10,
+                        MinStep      = 1,
+                        Labeler      = value => ((int)value).ToString(),
+                        SeparatorsPaint = new SolidColorPaint(new SKColor(0, 0, 0, 0))
                     }
                 }
             };
-
             chart.Dock = DockStyle.Fill;
-
+            pnlChart.BackColor = bgColor;
             pnlChart.Controls.Clear();
             pnlChart.Controls.Add(chart);
         }
