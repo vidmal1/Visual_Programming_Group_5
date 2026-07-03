@@ -1198,7 +1198,7 @@ namespace FocusTrack
 
         private void ConfigureRefreshTimer()
         {
-            dashboardRefreshTimer.Interval = 20000;
+            dashboardRefreshTimer.Interval = 30000;
             dashboardRefreshTimer.Tick += async (_, _) => await RefreshDashboardAsync();
         }
 
@@ -1686,10 +1686,10 @@ namespace FocusTrack
             var neutralCategory = categoryMap.FirstOrDefault(kvp => kvp.Value.Equals("neutral", StringComparison.OrdinalIgnoreCase));
             int neutralId = neutralCategory.Key != 0 ? neutralCategory.Key : (categoryMap.Keys.FirstOrDefault());
 
-
             var axisTitlePaint  = new SolidColorPaint(new SKColor(80, 90, 110));
             var axisLabelsPaint = new SolidColorPaint(new SKColor(55, 65, 85));
             var gridPaint       = new SolidColorPaint(new SKColor(210, 220, 235)) { StrokeThickness = 1 };
+
             var rowSeries = new RowSeries<double>
             {
                 Name   = "",
@@ -1699,15 +1699,20 @@ namespace FocusTrack
                 Rx          = 5,
                 Ry          = 5
             };
+
             rowSeries.PointMeasured += (point) =>
             {
                 if (point.Visual is null) return;
+
                 var app   = appUsage[point.Index];
                 int catId = appClassMap.TryGetValue(app.AppName.ToLower(), out var id) ? id : neutralId;
                 string catName = categoryMap.TryGetValue(catId, out var name) ? name : "Neutral";
+
                 point.Visual.Fill = new SolidColorPaint(GetChartCategoryColor(catName));
             };
+
             var bgColor = Color.FromArgb(250, 248, 236);
+
             var chart = new CartesianChart
             {
                 BackColor      = bgColor,
@@ -1715,6 +1720,7 @@ namespace FocusTrack
                 Series         = appUsage.Count == 0
                     ? Array.Empty<ISeries>()
                     : new ISeries[] { rowSeries },
+
                 YAxes = new[]
                 {
                     new Axis
@@ -1726,6 +1732,7 @@ namespace FocusTrack
                         MinStep         = 1
                     }
                 },
+
                 XAxes = new[]
                 {
                     new Axis
@@ -1736,12 +1743,14 @@ namespace FocusTrack
                         LabelsPaint  = axisLabelsPaint,
                         TextSize     = 10,
                         MinStep      = 1,
+                        Labeler      = value => ((int)value).ToString(),
                         SeparatorsPaint = new SolidColorPaint(new SKColor(0, 0, 0, 0))
                     }
                 }
             };
-            chart.Dock        = DockStyle.Fill;
-            chart.MinimumSize = new Size(0, Math.Max(220, appUsage.Count * 45 + 80));
+
+            chart.Dock = DockStyle.Fill;
+
             pnlChart.BackColor = bgColor;
             pnlChart.Controls.Clear();
             pnlChart.Controls.Add(chart);
@@ -1762,9 +1771,6 @@ namespace FocusTrack
 
         }
 
-        // =========================================================================
-        // UNIVERSITY MANDATORY FEATURE: REPOSITORY-DRIVEN ASYNCHRONOUS SETTINGS
-        // =========================================================================
         private List<AppCategory> localizedCategories = new();
 
         private void InitializeSettingsSection()
