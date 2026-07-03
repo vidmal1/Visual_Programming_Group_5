@@ -1740,7 +1740,8 @@ namespace FocusTrack
                     }
                 }
             };
-            chart.Dock = DockStyle.Fill;
+            chart.Dock        = DockStyle.Fill;
+            chart.MinimumSize = new Size(0, Math.Max(220, appUsage.Count * 45 + 80));
             pnlChart.BackColor = bgColor;
             pnlChart.Controls.Clear();
             pnlChart.Controls.Add(chart);
