@@ -1,1 +1,18 @@
+# Build output folders
+bin/
+obj/
+
+# Visual Studio personal settings
 .vs/
+*.user
+
+# IDE settings
+.idea/
+.vscode/
+
+# Database file (local data, not source code)
+*.db
+
+# Backup files
+*.backup
+*.bak
