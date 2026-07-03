@@ -1744,14 +1744,23 @@ namespace FocusTrack
                         TextSize        = 10,
                         MinStep         = 1,
                         Labeler         = value => ((int)Math.Round(value)).ToString(),
-                        SeparatorsPaint = new SolidColorPaint(new SKColor(220, 215, 200)) { StrokeThickness = 0.5f }
+                        SeparatorsPaint = new SolidColorPaint(new SKColor(0, 0, 0, 0))
                     }
                 }
             };
 
-            chart.Dock = DockStyle.Fill;
+            // Compute height so bars + X axis labels are never clipped
+            int requiredH = Math.Max(
+                pnlChart.ClientSize.Height,
+                appUsage.Count == 0 ? 200 : appUsage.Count * 52 + 90
+            );
 
-            pnlChart.BackColor = bgColor;
+            chart.Dock   = DockStyle.None;
+            chart.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+            chart.Size   = new Size(pnlChart.ClientSize.Width, requiredH);
+
+            pnlChart.AutoScroll = true;
+            pnlChart.BackColor  = bgColor;
             pnlChart.Controls.Clear();
             pnlChart.Controls.Add(chart);
         }
