@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Gimhana Menake\\Documents\\My documents\\github\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj": {}
+    "C:\\Users\\Achintha\\Desktop\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Gimhana Menake\\Documents\\My documents\\github\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj": {
+    "C:\\Users\\Achintha\\Desktop\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gimhana Menake\\Documents\\My documents\\github\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj",
+        "projectUniqueName": "C:\\Users\\Achintha\\Desktop\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj",
         "projectName": "FocusTrack",
-        "projectPath": "C:\\Users\\Gimhana Menake\\Documents\\My documents\\github\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj",
-        "packagesPath": "C:\\Users\\Gimhana Menake\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gimhana Menake\\Documents\\My documents\\github\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\obj\\",
+        "projectPath": "C:\\Users\\Achintha\\Desktop\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\FocusTrack.csproj",
+        "packagesPath": "C:\\Users\\Achintha\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Achintha\\Desktop\\Visual_Programming_Group_5\\FocusTrack\\FocusTrack\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Gimhana Menake\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Achintha\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -37,16 +37,46 @@
           ]
         },
         "restoreAuditProperties": {
-          "enableAudit": "true",
+          "enableAudit": "false",
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.300"
       },
       "frameworks": {
         "net10.0-windows": {
           "framework": "net10.0-windows7.0",
           "targetAlias": "net10.0-windows",
+          "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
+            "LiveChartsCore.SkiaSharpView.WinForms": {
+              "target": "Package",
+              "version": "[2.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[10.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.9, )"
+            },
+            "PdfSharp": {
+              "target": "Package",
+              "version": "[6.1.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -66,7 +96,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
